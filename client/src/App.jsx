@@ -6,8 +6,8 @@ import Footer from './components/Footer'
 
 const App = () => {
   return (
-    <div>
-      <div>
+    <div className='min-h-screen'>
+      <div className='gradient-bg-welcome'>
         <Header/>
         <Home/>
       </div>
