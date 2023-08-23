@@ -1,5 +1,3 @@
-//https://eth-goerli.g.alchemy.com/v2/V7oty0MHNwwPedZocoayYOcRJZoGia8e
-
 require('@nomiclabs/hardhat-waffle');
 
 module.exports = {
