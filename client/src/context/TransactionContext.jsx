@@ -12,6 +12,8 @@ const getEthereumContract = () => {
     const signer = provider.getSigner()
     const transactionContract = new ethers.Contract(contractAddress, contractABI, signer)
 
+    return transactionContract;
+
     console.log({
         provider,
         signer,
@@ -20,8 +22,67 @@ const getEthereumContract = () => {
 }
 
 export const TransactionProvider = ({children}) => {
+
+    const [currentAccount, setCurrentAccount] = useState('')
+    const [formData, setFormData] = useState({addresTo : '', amount : '', keyword : '', message : ''})
+
+    const handleChange = (e, name) => {
+        setFormData((prevState) => ({...prevState, [name] : e.target.value}))
+    }
+
+    const checkIfWalletIsConnected = async () => {
+        try {
+            if(!ethereum) return alert("Please install Meatamask")
+    
+            const accounts = await ethereum.request({ method : 'eth_accounts'})
+    
+            if(accounts.length){
+                setCurrentAccount(accounts[0])
+                //getAllTransactions
+            }
+            else{
+                console.log("No accounts found");
+            }
+            
+        } catch (error) {
+            console.log(error);
+
+            throw new Error("No ethereum object")
+        }
+    }
+
+    const connectWallet = async () => {
+        try {
+            if(!ethereum) return alert("Please install Meatamask")
+
+            const accounts = await ethereum.request({ method : 'eth_requestAccounts'})
+            setCurrentAccount(accounts[0])
+        } catch (error) {
+            console.log(error);
+
+            throw new Error("No ethereum object")
+        }
+    }
+
+    const sendTransaction = async () => {
+        try {
+            if(!ethereum) return alert("Please install Meatamask")
+            const { addressTo, amount, keyword, message } = formData;
+            const transactionContract = getEthereumContract()
+        } catch (error) {
+            console.log(error);
+
+            throw new Error("No ethereum object")
+        }
+    }
+
+    useEffect(() => {
+        checkIfWalletIsConnected()
+    }, []);
+    
+
     return(
-        <TransactionContext.Provider value={{}}>
+        <TransactionContext.Provider value={{connectWallet, currentAccount, formData, setFormData, handleChange, sendTransaction}}>
             {children}
         </TransactionContext.Provider>
     )
